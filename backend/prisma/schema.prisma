@@ -1,0 +1,131 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  student
+  employer
+  admin
+}
+
+enum LessonType {
+  video
+  task
+  sim
+}
+
+model User {
+  id           String        @id @default(cuid())
+  role         Role          @default(student)
+  email        String        @unique
+  passwordHash String
+  name         String
+  region       String?
+  portfolioUrl String?
+  badges       Badge[]
+  enrollments  Enrollment[]
+  applications Application[]
+  createdAt    DateTime      @default(now())
+  mentor       Mentor?
+  jobs         Job[]         @relation("EmployerJobs")
+}
+
+model Course {
+  id            String      @id @default(cuid())
+  title         String
+  slug          String      @unique
+  summary       String
+  skills        String[]
+  durationWeeks Int         @default(4)
+  lessons       Lesson[]
+  quizzes       Quiz[]
+  enrollments   Enrollment[]
+  createdAt     DateTime    @default(now())
+}
+
+model Lesson {
+  id        String     @id @default(cuid())
+  courseId  String
+  type      LessonType
+  title     String
+  videoUrl  String?
+  contentMd String?
+  order     Int
+  course    Course     @relation(fields: [courseId], references: [id])
+}
+
+model Quiz {
+  id        String     @id @default(cuid())
+  courseId  String
+  title     String
+  questions Question[]
+  course    Course     @relation(fields: [courseId], references: [id])
+}
+
+model Question {
+  id         String   @id @default(cuid())
+  quizId     String
+  text       String
+  skillTag   String
+  difficulty Int
+  options    Json
+  quiz       Quiz     @relation(fields: [quizId], references: [id])
+}
+
+model Enrollment {
+  id        String  @id @default(cuid())
+  userId    String
+  courseId  String
+  progress  Int     @default(0)
+  user      User    @relation(fields: [userId], references: [id])
+  course    Course  @relation(fields: [courseId], references: [id])
+}
+
+model Badge {
+  id          String   @id @default(cuid())
+  userId      String
+  name        String
+  skillTag    String
+  level       String
+  qrCodeUrl   String?
+  evidenceUrl String?
+  issuedAt    DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model Job {
+  id             String         @id @default(cuid())
+  employerId     String
+  title          String
+  city           String
+  salaryMin      Int?
+  salaryMax      Int?
+  skillsRequired String[]
+  description    String
+  createdAt      DateTime       @default(now())
+  employer       User           @relation("EmployerJobs", fields: [employerId], references: [id])
+  applications   Application[]
+}
+
+model Application {
+  id     String @id @default(cuid())
+  jobId  String
+  userId String
+  status String @default("submitted")
+  job    Job    @relation(fields: [jobId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model Mentor {
+  id          String   @id @default(cuid())
+  userId      String
+  skills      String[]
+  bio         String
+  calendarUrl String?
+  user        User     @relation(fields: [userId], references: [id])
+}
