@@ -1,0 +1,27 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Профессия 2.0 API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/health": { "get": { "summary": "Health check", "responses": { "200": { "description": "OK" } } } },
+    "/auth/register": { "post": { "summary": "Register", "responses": { "201": { "description": "Created" } } } },
+    "/auth/login": { "post": { "summary": "Login", "responses": { "200": { "description": "Success" } } } },
+    "/courses": { "get": { "summary": "List courses", "responses": { "200": { "description": "OK" } } } },
+    "/courses/{id}": { "get": { "summary": "Course detail", "responses": { "200": { "description": "OK" } } } },
+    "/courses/{id}/lessons": { "get": { "summary": "Course lessons", "responses": { "200": { "description": "OK" } } } },
+    "/courses/enrollments/me": { "get": { "summary": "My enrollments", "responses": { "200": { "description": "OK" } } } },
+    "/quiz/{courseId}/start": { "post": { "summary": "Start quiz", "responses": { "200": { "description": "Started" } } } },
+    "/quiz/{courseId}/answer": { "post": { "summary": "Answer question", "responses": { "200": { "description": "Next" } } } },
+    "/quiz/{courseId}/finish": { "post": { "summary": "Finish quiz", "responses": { "200": { "description": "Results" } } } },
+    "/me/badges": { "get": { "summary": "My badges", "responses": { "200": { "description": "OK" } } } },
+    "/me/profile": { "get": { "summary": "My profile", "responses": { "200": { "description": "OK" } } } },
+    "/me/portfolio": { "post": { "summary": "Update portfolio", "responses": { "200": { "description": "Updated" } } } },
+    "/jobs": { "get": { "summary": "List jobs", "responses": { "200": { "description": "OK" } } } },
+    "/jobs": { "post": { "summary": "Create job", "responses": { "201": { "description": "Created" } } } },
+    "/jobs/{id}/apply": { "post": { "summary": "Apply job", "responses": { "201": { "description": "Created" } } } },
+    "/mentors": { "get": { "summary": "Mentors", "responses": { "200": { "description": "OK" } } } },
+    "/public/users/{id}": { "get": { "summary": "Public profile", "responses": { "200": { "description": "OK" } } } }
+  }
+}
